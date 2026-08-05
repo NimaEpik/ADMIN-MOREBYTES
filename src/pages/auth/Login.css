@@ -1,0 +1,226 @@
+/* Full viewport container */
+.login-page {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #0d0705;
+}
+
+/* LOGIN BACKGROUND: OVEN.webp with Layer blur of 17 */
+.login-bg {
+  position: absolute;
+  top: -40px;
+  left: -40px;
+  right: -40px;
+  bottom: -40px;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  filter: blur(17px);
+  transform: scale(1.05);
+  z-index: 0;
+}
+
+/* Center Container */
+.login-container {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 480px;
+  padding: 16px;
+  display: flex;
+  justify-content: center;
+}
+
+.login-card {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.10);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 0.5px solid #E8E0D8;
+  border-radius: 10px;
+  padding: 32px 40px 36px;
+  box-shadow: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+/* LOGO NO BACKGROUND: MOREBYTES LOGO.png */
+.login-logo-container {
+  margin-bottom: 12px;
+  display: flex;
+  justify-content: center;
+}
+
+.login-logo {
+  width: 200px;
+  height: auto;
+  max-height: 200px;
+  object-fit: contain;
+}
+
+/* Start your shift: DM SANS BOLD, #FFFFFF */
+.login-title {
+  margin: 0 0 4px 0;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 700;
+  font-size: 45px;
+  line-height: 1.15;
+  color: #FFFFFF;
+  text-align: center;
+  letter-spacing: -0.02em;
+}
+
+/* Sign in to continue managing the store: DM SANS Medium, #FFFFFF with Opacity of 90% */
+.login-subtitle {
+  margin: 0 0 28px 0;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 500;
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.90);
+  text-align: center;
+}
+
+/* Form */
+.login-form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Field Container */
+.login-field {
+  margin-bottom: 18px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Email Address and Password labels: DM SANS Medium, #FFFFFF */
+.login-field label {
+  margin-bottom: 6px;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 500;
+  font-size: 15px;
+  color: #FFFFFF;
+  text-align: left;
+}
+
+/* Email Address and Password text box: #F5F0EB with Border of D9D0C8 */
+.login-field input {
+  width: 100%;
+  height: 44px;
+  background: #F5F0EB;
+  border: 1px solid #D9D0C8;
+  border-radius: 10px;
+  padding: 0 16px;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 500;
+  font-size: 15px;
+  color: #2D2522;
+  outline: none;
+  box-sizing: border-box;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+/* Error state for text box */
+.login-field input.input-error {
+  background: #FDF2F2 !important;
+  border: 1.5px solid #FF4D4D !important;
+  color: #8A0000 !important;
+}
+
+/* Error message text directly underneath invalid text box */
+.field-error-msg {
+  margin: 6px 0 0 0;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 500;
+  font-size: 13px;
+  color: #FF5252;
+  text-align: left;
+}
+
+/* Password wrapper & eye icon toggle */
+.login-password-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.login-password-wrapper input {
+  padding-right: 44px;
+}
+
+.login-password-toggle {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #333333;
+}
+
+.login-password-toggle svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* Sign In Button: E6522A
+   Sign In Text: Poppins Bold #FFFFFF
+*/
+.login-btn {
+  width: 100%;
+  height: 48px;
+  margin-top: 14px;
+  background: #E6522A;
+  border: none;
+  border-radius: 24px;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  font-size: 18px;
+  color: #FFFFFF;
+  cursor: pointer;
+  box-shadow: none;
+  transition: opacity 0.15s ease;
+}
+
+.login-btn:hover {
+  opacity: 0.95;
+}
+
+.login-btn:active {
+  opacity: 0.9;
+}
+
+/* Mobile responsive styling */
+@media (max-width: 500px) {
+  .login-card {
+    padding: 24px 20px 28px;
+    border-radius: 16px;
+  }
+
+  .login-title {
+    font-size: 32px;
+  }
+
+  .login-subtitle {
+    font-size: 14px;
+    margin-bottom: 20px;
+  }
+
+  .login-btn {
+    height: 46px;
+    font-size: 16px;
+  }
+}
