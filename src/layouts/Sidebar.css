@@ -1,0 +1,191 @@
+/* SIDEBAR COLOR: 1C1B18 */
+.sidebar {
+  width: 200px;
+  height: 100vh;
+  background-color: #1C1B18;
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  box-sizing: border-box;
+  user-select: none;
+}
+
+/* LOGO: MOREBYTES LOGO.png */
+.sidebar-logo-container {
+  padding: 16px 12px 14px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.sidebar-logo {
+  width: 140px;
+  height: auto;
+  max-height: 110px;
+  object-fit: contain;
+}
+
+/* DIVIDER LINE BETWEEN LOGO & DASHBOARD / ABOVE USER: #3A3935 weight 0.5 */
+.sidebar-divider {
+  height: 0.5px;
+  background-color: #3A3935;
+  width: 100%;
+  border: none;
+  flex-shrink: 0;
+}
+
+/* Navigation Container */
+.sidebar-nav {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 6px 0;
+  overflow-y: auto;
+}
+
+/* Dashboard, Orders, Menu, Inventory, Dispatch, Reports, and Driver items */
+.sidebar-nav-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: 44px;
+  padding: 0 16px 0 16px;
+  text-decoration: none;
+  color: #FFFFFF;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 500;
+  font-size: 16px;
+  transition: background-color 0.15s ease;
+  box-sizing: border-box;
+}
+
+.sidebar-nav-item:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+/* Active State Banner & Left Accent Indicator (Matching Figma prototype active Dashboard item) */
+.sidebar-nav-item.active {
+  background-color: #B58200; /* Dark gold/amber banner fill */
+  color: #FFFFFF;
+}
+
+.sidebar-active-indicator {
+  display: none;
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 6px;
+  background-color: #FFA500; /* Bright gold/orange indicator bar */
+}
+
+.sidebar-nav-item.active .sidebar-active-indicator {
+  display: block;
+}
+
+/* Icon */
+.sidebar-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 12px;
+  color: #FFFFFF;
+  flex-shrink: 0;
+}
+
+.sidebar-label {
+  color: #FFFFFF;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+/* Bottom Profile Section */
+.sidebar-footer {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+}
+
+.sidebar-user-row {
+  display: flex;
+  align-items: center;
+  padding: 12px 12px;
+  gap: 10px;
+}
+
+/* CIRCLE: #FFA500 with Initial of #FFFFFF */
+.sidebar-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background-color: #FFA500;
+  color: #FFFFFF;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 700;
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* User Info Container */
+.sidebar-user-info {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow: hidden;
+}
+
+/* John Doe (Name): #FFFFFF */
+.sidebar-user-name {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  color: #FFFFFF;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  line-height: 1.2;
+}
+
+/* Administrator (Role): #FFFFFF */
+.sidebar-user-role {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 400;
+  font-size: 12px;
+  color: #FFFFFF;
+  opacity: 0.85;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  line-height: 1.2;
+  margin-top: 2px;
+}
+
+/* Logout Exit Icon */
+.sidebar-logout-btn {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.6);
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: color 0.15s ease, background-color 0.15s ease;
+  flex-shrink: 0;
+}
+
+.sidebar-logout-btn:hover {
+  color: #FFFFFF;
+  background-color: rgba(255, 255, 255, 0.1);
+}

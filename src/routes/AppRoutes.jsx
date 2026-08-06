@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import MainLayout from '../layouts/MainLayout';
 
 import Login from '../pages/auth/Login';
 import Dashboard from '../pages/supervisor/Dashboard';
@@ -43,7 +44,9 @@ function AppRoutes() {
           element={
             <ProtectedRoute>
               <RoleRoute allowedRole="supervisor">
-                <Dashboard />
+                <MainLayout>
+                  <Dashboard />
+                </MainLayout>
               </RoleRoute>
             </ProtectedRoute>
           }
@@ -53,7 +56,9 @@ function AppRoutes() {
           element={
             <ProtectedRoute>
               <RoleRoute allowedRole="supervisor">
-                <Orders />
+                <MainLayout>
+                  <Orders />
+                </MainLayout>
               </RoleRoute>
             </ProtectedRoute>
           }
@@ -63,7 +68,9 @@ function AppRoutes() {
           element={
             <ProtectedRoute>
               <RoleRoute allowedRole="supervisor">
-                <Menu />
+                <MainLayout>
+                  <Menu />
+                </MainLayout>
               </RoleRoute>
             </ProtectedRoute>
           }
@@ -73,7 +80,9 @@ function AppRoutes() {
           element={
             <ProtectedRoute>
               <RoleRoute allowedRole="supervisor">
-                <Inventory />
+                <MainLayout>
+                  <Inventory />
+                </MainLayout>
               </RoleRoute>
             </ProtectedRoute>
           }
@@ -83,7 +92,9 @@ function AppRoutes() {
           element={
             <ProtectedRoute>
               <RoleRoute allowedRole="supervisor">
-                <Dispatch />
+                <MainLayout>
+                  <Dispatch />
+                </MainLayout>
               </RoleRoute>
             </ProtectedRoute>
           }
@@ -93,7 +104,9 @@ function AppRoutes() {
           element={
             <ProtectedRoute>
               <RoleRoute allowedRole="supervisor">
-                <Driver />
+                <MainLayout>
+                  <Driver />
+                </MainLayout>
               </RoleRoute>
             </ProtectedRoute>
           }
@@ -103,7 +116,9 @@ function AppRoutes() {
           element={
             <ProtectedRoute>
               <RoleRoute allowedRole="supervisor">
-                <Reports />
+                <MainLayout>
+                  <Reports />
+                </MainLayout>
               </RoleRoute>
             </ProtectedRoute>
           }
