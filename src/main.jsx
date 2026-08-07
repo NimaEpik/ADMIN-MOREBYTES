@@ -3,11 +3,14 @@ import { createRoot } from 'react-dom/client';
 import './index.css';
 import App from './App.jsx';
 import { AuthProvider } from './context/AuthContext';
+import { MenuProvider } from './context/MenuContext';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <AuthProvider>
-      <App />
+      <MenuProvider>
+        <App />
+      </MenuProvider>
     </AuthProvider>
   </StrictMode>,
 );

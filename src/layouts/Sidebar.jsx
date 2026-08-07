@@ -66,7 +66,6 @@ function Sidebar() {
 
   const userName = user?.name || 'John Doe';
 
-  // Extract initials (e.g. "John Doe" -> "JD")
   const getInitials = (name) => {
     if (!name) return 'JD';
     const parts = name.trim().split(' ');

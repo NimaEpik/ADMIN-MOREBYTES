@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useMenu } from '../../context/MenuContext';
 import { 
   LuSearch, 
   LuPlus, 
@@ -19,8 +20,8 @@ import './Menu.css';
 const DEFAULT_IMAGE_PLACEHOLDER = '';
 
 function Menu() {
-  // State for items array (starts empty as requested)
-  const [items, setItems] = useState([]);
+  // Pull global menu state from context instead of local useState
+  const { menuItems, addItem, updateItem, archiveItem, restoreItem, toggleAvailability } = useMenu();
 
   // Tab & Filters state
   const [activeTab, setActiveTab] = useState('active'); // 'active' | 'archived' | 'all'
@@ -49,16 +50,16 @@ function Menu() {
       { name: 'Medium', price: '' },
       { name: 'Large', price: '' },
     ],
-    imageUrl: '',
+    image: '',
   });
 
-  // Calculate Tab Counts
-  const activeCount = items.filter((i) => i.status === 'available').length;
-  const archivedCount = items.filter((i) => i.status === 'archived').length;
-  const allCount = items.length;
+  // Calculate Tab Counts — uses menuItems from context
+  const activeCount = menuItems.filter((i) => i.status === 'available').length;
+  const archivedCount = menuItems.filter((i) => i.status === 'archived').length;
+  const allCount = menuItems.length;
 
   // Filter Items according to Active Tab, Category, and Search Query
-  const filteredItems = items.filter((item) => {
+  const filteredItems = menuItems.filter((item) => {
     // 1. Tab Status Filter
     if (activeTab === 'active' && item.status !== 'available') return false;
     if (activeTab === 'archived' && item.status !== 'archived') return false;
@@ -90,42 +91,30 @@ function Menu() {
     setCurrentPage(1);
   };
 
-  // Handle Availability Toggle
+  // Handle Availability Toggle — delegates to context
   const handleToggleAvailability = (id) => {
-    setItems((prevItems) =>
-      prevItems.map((item) =>
-        item.id === id ? { ...item, isAvailable: !item.isAvailable } : item
-      )
-    );
+    toggleAvailability(id);
   };
 
-  // Archive Item Actions
+  // Archive Item Actions — delegates to context
   const handleOpenArchiveModal = (item) => {
     setArchivingItem(item);
   };
 
   const handleConfirmArchive = () => {
     if (!archivingItem) return;
-    setItems((prevItems) =>
-      prevItems.map((item) =>
-        item.id === archivingItem.id ? { ...item, status: 'archived' } : item
-      )
-    );
+    archiveItem(archivingItem.id);
     setArchivingItem(null);
   };
 
-  // Restore Item Actions
+  // Restore Item Actions — delegates to context
   const handleOpenRestoreModal = (item) => {
     setRestoringItem(item);
   };
 
   const handleConfirmRestore = () => {
     if (!restoringItem) return;
-    setItems((prevItems) =>
-      prevItems.map((item) =>
-        item.id === restoringItem.id ? { ...item, status: 'available' } : item
-      )
-    );
+    restoreItem(restoringItem.id);
     setRestoringItem(null);
   };
 
@@ -143,7 +132,7 @@ function Menu() {
         { name: 'Medium', price: '' },
         { name: 'Large', price: '' },
       ],
-      imageUrl: '',
+      image: '',
     });
     setIsItemModalOpen(true);
   };
@@ -164,7 +153,7 @@ function Menu() {
             { name: 'Medium', price: '' },
             { name: 'Large', price: '' },
           ],
-      imageUrl: item.imageUrl || '',
+      image: item.image || '',
     });
     setIsItemModalOpen(true);
   };
@@ -198,13 +187,13 @@ function Menu() {
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setFormData((prev) => ({ ...prev, imageUrl: reader.result }));
+        setFormData((prev) => ({ ...prev, image: reader.result }));
       };
       reader.readAsDataURL(file);
     }
   };
 
-  // Save Item (Add or Edit)
+  // Save Item (Add or Edit) — delegates to context
   const handleSaveItem = (e) => {
     e.preventDefault();
 
@@ -224,8 +213,8 @@ function Menu() {
     }
 
     if (modalMode === 'add') {
+      // Build new item and pass to context — id is auto-generated in addItem
       const newItem = {
-        id: Date.now().toString(),
         name: formData.name.trim(),
         description: formData.description.trim(),
         category: formData.category,
@@ -234,29 +223,23 @@ function Menu() {
         hasSizes: formData.hasSizes,
         sizes: validSizes,
         status: 'available',
-        isAvailable: true,
-        imageUrl: formData.imageUrl || DEFAULT_IMAGE_PLACEHOLDER,
+        availability: true,
+        image: formData.image || DEFAULT_IMAGE_PLACEHOLDER,
       };
-      setItems((prev) => [newItem, ...prev]);
+      addItem(newItem);
     } else {
-      setItems((prev) =>
-        prev.map((item) => {
-          if (item.id === editingItemId) {
-            return {
-              ...item,
-              name: formData.name.trim(),
-              description: formData.description.trim(),
-              category: formData.category,
-              price: computedPrice,
-              maxPrice: computedMaxPrice,
-              hasSizes: formData.hasSizes,
-              sizes: validSizes,
-              imageUrl: formData.imageUrl || item.imageUrl,
-            };
-          }
-          return item;
-        })
-      );
+      // Build updated fields and pass to context
+      const updatedFields = {
+        name: formData.name.trim(),
+        description: formData.description.trim(),
+        category: formData.category,
+        price: computedPrice,
+        maxPrice: computedMaxPrice,
+        hasSizes: formData.hasSizes,
+        sizes: validSizes,
+        image: formData.image || undefined,
+      };
+      updateItem(editingItemId, updatedFields);
     }
 
     setIsItemModalOpen(false);
@@ -312,6 +295,8 @@ function Menu() {
             <option value="All Categories">All Categories</option>
             <option value="Pizza">Pizza</option>
             <option value="Desserts">Desserts</option>
+            <option value="Snacks">Snacks</option>
+            <option value="Rice Meals">Rice Meals</option>
             <option value="Beverages">Beverages</option>
           </select>
           <LuChevronDown className="menu-select-arrow" size={18} />
@@ -384,8 +369,8 @@ function Menu() {
                       {/* Image Thumbnail */}
                       <td>
                         <div className="menu-img-container">
-                          {item.imageUrl ? (
-                            <img src={item.imageUrl} alt={item.name} className="menu-img" />
+                          {item.image ? (
+                            <img src={item.image} alt={item.name} className="menu-img" />
                           ) : (
                             <div className="menu-img-fallback">
                               <LuUtensils size={20} />
@@ -429,11 +414,11 @@ function Menu() {
                         </div>
                       </td>
 
-                      {/* Availability Toggle */}
+                      {/* Availability Toggle — uses context field */}
                       <td style={{ textAlign: 'center' }}>
                         <button
                           type="button"
-                          className={`menu-toggle-switch ${item.isAvailable ? 'on' : 'off'}`}
+                          className={`menu-toggle-switch ${item.availability ? 'on' : 'off'}`}
                           onClick={() => handleToggleAvailability(item.id)}
                           aria-label="Toggle availability"
                         >
@@ -543,17 +528,17 @@ function Menu() {
               <div className="menu-form-group">
                 <label>Item Image</label>
                 <div className="menu-image-upload-box">
-                  {formData.imageUrl ? (
+                  {formData.image ? (
                     <div className="menu-image-preview-wrap">
                       <img
-                        src={formData.imageUrl}
+                        src={formData.image}
                         alt="Preview"
                         className="menu-image-preview"
                       />
                       <button
                         type="button"
                         className="menu-image-remove"
-                        onClick={() => setFormData((prev) => ({ ...prev, imageUrl: '' }))}
+                        onClick={() => setFormData((prev) => ({ ...prev, image: '' }))}
                       >
                         <LuX size={16} />
                       </button>
@@ -608,6 +593,8 @@ function Menu() {
                 >
                   <option value="Pizza">Pizza</option>
                   <option value="Desserts">Desserts</option>
+                  <option value="Snacks">Snacks</option>
+                  <option value="Rice Meals">Rice Meals</option>
                   <option value="Beverages">Beverages</option>
                 </select>
               </div>
