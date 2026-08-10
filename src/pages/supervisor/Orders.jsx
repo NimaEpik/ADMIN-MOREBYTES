@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useMenu } from '../../context/MenuContext';
+import { useOrders } from '../../context/OrdersContext';
 import {
   LuShoppingCart,
   LuCircleCheck,
@@ -17,9 +18,6 @@ import {
   LuShoppingBag,
 } from 'react-icons/lu';
 import './Orders.css';
-
-// Format order ID like #ORD-0001
-const formatOrderId = (num) => `ORD-${String(num).padStart(4, '0')}`;
 
 // Relative time helper
 const getRelativeTime = (date) => {
@@ -66,10 +64,7 @@ const isWithinDateFilter = (date, filter) => {
 function Orders() {
   // Pull menu items from context for POS modal
   const { menuItems } = useMenu();
-
-  // Orders state — starts empty
-  const [orders, setOrders] = useState([]);
-  const [orderCounter, setOrderCounter] = useState(1); // auto-increment
+  const { orders, orderCounter, addOrder, updateOrderStatus, cancelOrder, formatOrderId } = useOrders();
 
   // Filters
   const [statusFilter, setStatusFilter] = useState('All');
@@ -145,16 +140,12 @@ function Orders() {
 
   // Status advancement
   const advanceStatus = (orderId, newStatus) => {
-    setOrders((prev) =>
-      prev.map((o) => (o.id === orderId ? { ...o, status: newStatus } : o))
-    );
+    updateOrderStatus(orderId, newStatus);
   };
 
-  // Cancel order
-  const cancelOrder = (orderId) => {
-    setOrders((prev) =>
-      prev.map((o) => (o.id === orderId ? { ...o, status: 'Cancelled' } : o))
-    );
+  // Cancel order handler
+  const handleCancelOrder = (orderId) => {
+    cancelOrder(orderId);
     setOpenDropdownId(null);
   };
 
@@ -194,18 +185,7 @@ function Orders() {
 
   // Place order from POS modal
   const handlePlaceOrder = (orderData) => {
-    const newOrder = {
-      id: Date.now(),
-      orderId: formatOrderId(orderCounter),
-      customerName: orderData.customerName,
-      orderType: orderData.orderType,
-      items: orderData.items,
-      total: orderData.total,
-      status: orderData.orderType === 'Online Order' ? 'Pending' : 'Preparing',
-      createdAt: new Date().toISOString(),
-    };
-    setOrders((prev) => [newOrder, ...prev]);
-    setOrderCounter((prev) => prev + 1);
+    addOrder(orderData);
     setIsPOSOpen(false);
   };
 
@@ -414,7 +394,7 @@ function Orders() {
                               {(order.status === 'Pending' || order.status === 'Confirmed') && (
                                 <button
                                   className="orders-dropdown-item danger"
-                                  onClick={() => cancelOrder(order.id)}
+                                  onClick={() => handleCancelOrder(order.id)}
                                 >
                                   Cancel Order
                                 </button>
