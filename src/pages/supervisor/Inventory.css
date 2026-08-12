@@ -506,10 +506,13 @@
   bottom: 0;
   background-color: rgba(0, 0, 0, 0.5);
   display: flex;
-  align-items: center;
+  /* allow scrolling when modal is taller than viewport */
+  align-items: flex-start;
   justify-content: center;
   z-index: 1000;
-  padding: 20px;
+  padding: 20px 12px;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .modal-container {
@@ -517,7 +520,9 @@
   border-radius: 16px;
   width: 100%;
   max-width: 520px;
-  max-height: 90vh;
+  /* ensure container fits within viewport with some breathing room */
+  max-height: calc(100vh - 48px);
+  margin: 24px 0;
   box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
   display: flex;
   flex-direction: column;
@@ -587,7 +592,9 @@
 .modal-body {
   padding: 24px;
   overflow-y: auto;
-  flex: 1;
+  flex: 1 1 auto;
+  /* ensure modal body can scroll when content is tall */
+  max-height: calc(100vh - 240px);
 }
 
 .modal-footer {

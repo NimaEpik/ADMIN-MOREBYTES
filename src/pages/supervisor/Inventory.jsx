@@ -254,7 +254,6 @@ function Inventory() {
       <div className="inventory-header">
         <div>
           <h1 className="inventory-title">Inventory Stock</h1>
-          <p className="inventory-subtitle">Manage and monitor your inventory items in real-time.</p>
         </div>
         <div className="inventory-top-actions">
           <button
@@ -815,7 +814,8 @@ function Inventory() {
                     }}
                   >
                     <option value="All">All Activities</option>
-                    <option value="Restock">Restock</option>
+                    <option value="New Stock">New Stock</option>
+                    <option value="Restocked">Restocked</option>
                     <option value="Stock Deducted">Stock Deducted</option>
                     <option value="Manual Adjustment">Manual Adjustment</option>
                   </select>
@@ -862,7 +862,8 @@ function Inventory() {
                     <tbody>
                       {paginatedLogs.map((log) => {
                         let actionClass = 'action-manual';
-                        if (log.action === 'Restock') actionClass = 'action-restock';
+                        // New Stock and Restocked should use the restock style
+                        if (log.action === 'New Stock' || log.action === 'Restocked') actionClass = 'action-restock';
                         if (log.action === 'Stock Deducted') actionClass = 'action-deducted';
 
                         let qtyClass = 'qty-neutral';

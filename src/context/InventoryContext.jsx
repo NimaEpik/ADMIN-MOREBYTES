@@ -56,11 +56,11 @@ export function InventoryProvider({ children }) {
 
     setInventoryItems((prev) => [newItem, ...prev]);
 
-    // Log addition action
+    // Log addition action (newly added stock)
     addLog({
       itemName: newItem.name,
       category: newItem.category,
-      action: 'Restock',
+      action: 'New Stock',
       quantity: `+${stock} pcs`,
       newStock: `${stock} pcs`,
       reason: 'Initial Stock Addition',
@@ -97,7 +97,7 @@ export function InventoryProvider({ children }) {
       addLog({
         itemName: updatedTarget.name,
         category: updatedTarget.category,
-        action: 'Restock',
+        action: 'Restocked',
         quantity: `+${qty} pcs`,
         newStock: `${updatedTarget.currentStock} pcs`,
         reason: 'Manual Restock',
