@@ -118,6 +118,8 @@ function Dashboard() {
   const [fromTime, setFromTime] = useState('8:00 AM');
   const [toTime, setToTime] = useState('8:00 PM');
   const [weekOffset, setWeekOffset] = useState(0);
+  const [fromMonth, setFromMonth] = useState(0); // Jan
+  const [toMonth, setToMonth] = useState(11); // Dec
 
   const userName = user?.name || 'Admin';
   const todayDate = new Date().toLocaleDateString('en-US', {
@@ -202,17 +204,23 @@ function Dashboard() {
       return slots;
     }
 
-    // Monthly
+    // Monthly — filter by selected month range
     const year = new Date().getFullYear();
-    const slots = MONTH_LABELS.map((label, i) => ({ label, month: i, value: 0 }));
+    const rangeStart = Math.min(fromMonth, toMonth);
+    const rangeEnd = Math.max(fromMonth, toMonth);
+    const slots = [];
+    for (let i = rangeStart; i <= rangeEnd; i++) {
+      slots.push({ label: MONTH_LABELS[i], month: i, value: 0 });
+    }
     completedOrders.forEach((o) => {
       const d = new Date(o.createdAt);
-      if (d.getFullYear() === year) {
-        slots[d.getMonth()].value += Number(o.total || 0);
+      if (d.getFullYear() === year && d.getMonth() >= rangeStart && d.getMonth() <= rangeEnd) {
+        const idx = d.getMonth() - rangeStart;
+        slots[idx].value += Number(o.total || 0);
       }
     });
     return slots;
-  }, [orders, chartMode, fromTime, toTime, weekOffset]);
+  }, [orders, chartMode, fromTime, toTime, weekOffset, fromMonth, toMonth]);
 
   // Week range label for weekly mode
   const weekRangeLabel = useMemo(() => {
@@ -347,6 +355,35 @@ function Dashboard() {
                     <LuChevronRight size={16} />
                   </button>
                 </div>
+              )}
+
+              {chartMode === 'Monthly' && (
+                <>
+                  <div className="dash-select-wrapper">
+                    <select
+                      className="dash-select"
+                      value={fromMonth}
+                      onChange={(e) => setFromMonth(Number(e.target.value))}
+                    >
+                      {MONTH_LABELS.map((label, i) => (
+                        <option key={`from-month-${label}`} value={i}>From {label}</option>
+                      ))}
+                    </select>
+                    <LuChevronDown className="dash-select-arrow" size={16} />
+                  </div>
+                  <div className="dash-select-wrapper">
+                    <select
+                      className="dash-select"
+                      value={toMonth}
+                      onChange={(e) => setToMonth(Number(e.target.value))}
+                    >
+                      {MONTH_LABELS.map((label, i) => (
+                        <option key={`to-month-${label}`} value={i}>To {label}</option>
+                      ))}
+                    </select>
+                    <LuChevronDown className="dash-select-arrow" size={16} />
+                  </div>
+                </>
               )}
             </div>
           </div>
