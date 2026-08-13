@@ -1,0 +1,785 @@
+/* Driver.css - Pure CSS Styling for Supervisor Driver Management Module */
+
+/* Main Page Layout */
+.driver-page {
+  width: 100%;
+  min-height: 100vh;
+  background-color: #FFF9F9;
+  padding: 32px 40px;
+  box-sizing: border-box;
+  font-family: 'DM Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  color: #1C1B18;
+}
+
+/* Header Section */
+.driver-header {
+  margin-bottom: 24px;
+}
+
+.driver-title {
+  font-size: 32px;
+  font-weight: 700;
+  color: #1C1B18;
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+
+/* Filter Bar */
+.driver-filter-bar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.search-input-wrapper {
+  position: relative;
+  flex: 1;
+  max-width: 440px;
+  display: flex;
+  align-items: center;
+}
+
+.search-icon {
+  position: absolute;
+  left: 14px;
+  color: #9CA3AF;
+  font-size: 18px;
+  pointer-events: none;
+}
+
+.search-input {
+  width: 100%;
+  height: 44px;
+  padding: 0 16px 0 42px;
+  background-color: #FFFFFF;
+  border: 1px solid #E5E7EB;
+  border-radius: 10px;
+  font-size: 14px;
+  color: #1F2937;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.search-input:focus {
+  border-color: #FFA500;
+  box-shadow: 0 0 0 3px rgba(255, 165, 0, 0.15);
+}
+
+.select-dropdown-wrapper {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.select-chevron-icon {
+  position: absolute;
+  right: 14px;
+  color: #6B7280;
+  font-size: 18px;
+  pointer-events: none;
+}
+
+.filter-select {
+  height: 44px;
+  padding: 0 38px 0 16px;
+  background-color: #FFFFFF;
+  border: 1px solid #E5E7EB;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #374151;
+  outline: none;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  transition: border-color 0.2s ease;
+}
+
+.filter-select:focus {
+  border-color: #FFA500;
+}
+
+/* Main Table Container Card */
+.table-card {
+  background-color: #FFFFFF;
+  border: 1px solid #E5E7EB;
+  border-radius: 14px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+  margin-bottom: 24px;
+}
+
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.driver-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 14px;
+}
+
+.driver-table th {
+  background-color: #FAFAFA;
+  color: #6B7280;
+  font-weight: 600;
+  font-size: 13px;
+  padding: 16px 20px;
+  border-bottom: 1px solid #E5E7EB;
+  white-space: nowrap;
+}
+
+.driver-table td {
+  padding: 16px 20px;
+  border-bottom: 1px solid #F3F4F6;
+  color: #374151;
+  vertical-align: middle;
+}
+
+.driver-table tbody tr {
+  transition: background-color 0.15s ease;
+}
+
+.driver-table tbody tr:hover {
+  background-color: #F9FAFB;
+}
+
+/* Cells Styling */
+.driver-id-cell {
+  font-family: monospace;
+  font-weight: 600;
+  color: #4B5563;
+  font-size: 13px;
+}
+
+.driver-name-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.driver-name-bold {
+  font-weight: 700;
+  color: #111827;
+}
+
+.driver-phone-gray {
+  font-size: 12px;
+  color: #6B7280;
+}
+
+.text-dark {
+  color: #111827;
+  font-weight: 500;
+}
+
+.uppercase-vehicle {
+  text-transform: capitalize;
+}
+
+.expiry-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.expiry-date {
+  color: #111827;
+  font-weight: 500;
+}
+
+.expiry-days {
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.expiry-green {
+  color: #22C55E;
+}
+
+.expiry-orange {
+  color: #F97316;
+}
+
+.expiry-red {
+  color: #EF4444;
+}
+
+/* Rating Cell */
+.rating-cell {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.stars-row {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.star-icon {
+  font-size: 14px;
+}
+
+.star-filled {
+  color: #FFA500;
+  fill: #FFA500;
+}
+
+.star-empty {
+  color: #D1D5DB;
+}
+
+.rating-num {
+  font-size: 13px;
+  font-weight: 700;
+  color: #374151;
+}
+
+/* Status Badges */
+.status-badge {
+  display: inline-block;
+  padding: 4px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.badge-active {
+  background-color: #22C55E;
+  color: #FFFFFF;
+}
+
+.badge-inactive {
+  background-color: #9CA3AF;
+  color: #FFFFFF;
+}
+
+.text-right {
+  text-align: right;
+}
+
+/* View Action Button */
+.btn-view-outline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 18px;
+  border-radius: 8px;
+  border: 1px solid #FFA500;
+  background-color: transparent;
+  color: #FFA500;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-view-outline:hover {
+  background-color: #FFF7ED;
+}
+
+/* Empty State */
+.empty-state-container {
+  padding: 64px 20px;
+  text-align: center;
+}
+
+.empty-state-icon-box {
+  width: 64px;
+  height: 64px;
+  border-radius: 16px;
+  background-color: #FFF7ED;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 16px auto;
+}
+
+.empty-state-icon {
+  font-size: 32px;
+  color: #FFA500;
+}
+
+.empty-state-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #111827;
+  margin: 0 0 6px 0;
+}
+
+.empty-state-subtext {
+  font-size: 14px;
+  color: #6B7280;
+  margin: 0 0 20px 0;
+}
+
+.btn-sample-drivers {
+  background-color: #FFA500;
+  color: #FFFFFF;
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: none;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.btn-sample-drivers:hover {
+  background-color: #E69500;
+}
+
+/* Table Pagination Footer */
+.table-pagination-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  border-top: 1px solid #E5E7EB;
+  background-color: #FFFFFF;
+}
+
+.pagination-info {
+  font-size: 13px;
+  color: #6B7280;
+}
+
+.pagination-controls {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.pagination-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  border: 1px solid #E5E7EB;
+  background-color: #FFFFFF;
+  color: #374151;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.15s ease;
+}
+
+.pagination-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.pagination-btn:not(:disabled):hover {
+  background-color: #F3F4F6;
+}
+
+.pagination-number-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  border: 1px solid #E5E7EB;
+  background-color: #FFFFFF;
+  color: #374151;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.pagination-number-btn:hover {
+  background-color: #F3F4F6;
+}
+
+.pagination-number-btn.active {
+  background-color: #FFA500;
+  border-color: #FFA500;
+  color: #FFFFFF;
+}
+
+/* ========================================================================= */
+/* DRIVER DETAILS PANEL (Slide-in from Right Side) */
+/* ========================================================================= */
+.panel-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.3);
+  z-index: 1000;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.driver-details-panel {
+  width: 100%;
+  max-width: 420px;
+  height: 100vh;
+  background-color: #FFFFFF;
+  box-shadow: -4px 0 20px rgba(0, 0, 0, 0.15);
+  display: flex;
+  flex-direction: column;
+  animation: slideInRight 0.25s ease-out forwards;
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px;
+  border-bottom: 1px solid #E5E7EB;
+}
+
+.panel-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #111827;
+  margin: 0;
+}
+
+.panel-close-x {
+  background: transparent;
+  border: none;
+  font-size: 20px;
+  color: #9CA3AF;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.panel-close-x:hover {
+  color: #111827;
+  background-color: #F3F4F6;
+}
+
+.panel-content {
+  flex: 1;
+  padding: 20px 24px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* 1. Top Profile Header Card */
+.profile-header-card {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  padding: 16px;
+  background-color: #F9FAFB;
+  border: 1px solid #F3F4F6;
+  border-radius: 12px;
+}
+
+.avatar-circle {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background-color: #E5E7EB;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.avatar-icon {
+  font-size: 32px;
+  color: #9CA3AF;
+}
+
+.profile-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.name-and-status {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.panel-driver-name {
+  font-size: 18px;
+  font-weight: 700;
+  color: #111827;
+}
+
+.panel-driver-id {
+  font-size: 13px;
+  font-weight: 600;
+  color: #6B7280;
+  font-family: monospace;
+}
+
+.contact-item {
+  font-size: 13px;
+  color: #4B5563;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.contact-icon {
+  font-size: 14px;
+  color: #9CA3AF;
+}
+
+/* Panel Sections */
+.panel-section {
+  border-top: 1px solid #F3F4F6;
+  padding-top: 16px;
+}
+
+.panel-section-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: #111827;
+  margin: 0 0 12px 0;
+}
+
+.details-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.detail-item {
+  display: flex;
+  align-items: center;
+  font-size: 13px;
+}
+
+.detail-icon {
+  font-size: 16px;
+  color: #9CA3AF;
+  margin-right: 8px;
+}
+
+.detail-label {
+  color: #6B7280;
+  flex: 1;
+}
+
+.detail-value {
+  color: #111827;
+  font-weight: 600;
+}
+
+/* Performance Summary Grid */
+.performance-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.perf-box {
+  background-color: #FAFAFA;
+  border: 1px solid #E5E7EB;
+  border-radius: 10px;
+  padding: 12px 8px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.perf-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: #6B7280;
+}
+
+.perf-value {
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.text-green {
+  color: #22C55E;
+}
+
+.text-red {
+  color: #EF4444;
+}
+
+/* Customer Reviews */
+.reviews-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.review-card {
+  background-color: #F9FAFB;
+  border: 1px solid #F3F4F6;
+  border-radius: 8px;
+  padding: 10px 12px;
+}
+
+.review-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.review-stars {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.review-rating-num {
+  font-size: 12px;
+  font-weight: 700;
+  color: #374151;
+  margin-left: 2px;
+}
+
+.review-date {
+  font-size: 11px;
+  color: #9CA3AF;
+}
+
+.review-comment {
+  font-size: 12px;
+  color: #374151;
+  margin: 0;
+}
+
+.no-reviews-msg {
+  font-size: 13px;
+  color: #9CA3AF;
+  text-align: center;
+  padding: 12px;
+}
+
+/* Notes Section */
+.notes-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.btn-edit-notes {
+  background: transparent;
+  border: none;
+  color: #FFA500;
+  font-size: 16px;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-edit-notes:hover {
+  background-color: #FFF7ED;
+}
+
+.notes-display-box {
+  background-color: #F9FAFB;
+  border: 1px solid #E5E7EB;
+  border-radius: 8px;
+  padding: 12px;
+  font-size: 13px;
+  color: #374151;
+  min-height: 48px;
+}
+
+.notes-edit-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.notes-textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #FFA500;
+  border-radius: 8px;
+  font-size: 13px;
+  font-family: inherit;
+  color: #111827;
+  outline: none;
+  resize: vertical;
+  box-sizing: border-box;
+}
+
+.notes-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.btn-cancel-sm {
+  background-color: #E5E7EB;
+  color: #374151;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-save-sm {
+  background-color: #FFA500;
+  color: #FFFFFF;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* Panel Bottom Close Button */
+.panel-footer {
+  padding: 16px 24px;
+  border-top: 1px solid #E5E7EB;
+  background-color: #FFFFFF;
+}
+
+.btn-close-panel {
+  width: 100%;
+  height: 44px;
+  background-color: #EF4444;
+  color: #FFFFFF;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.btn-close-panel:hover {
+  background-color: #DC2626;
+}

@@ -5,6 +5,7 @@ import App from './App.jsx';
 import { AuthProvider } from './context/AuthContext';
 import { MenuProvider } from './context/MenuContext';
 import { InventoryProvider } from './context/InventoryContext';
+import { DriverProvider } from './context/DriverContext';
 import { OrdersProvider } from './context/OrdersContext';
 
 createRoot(document.getElementById('root')).render(
@@ -12,9 +13,11 @@ createRoot(document.getElementById('root')).render(
     <AuthProvider>
       <MenuProvider>
         <InventoryProvider>
-          <OrdersProvider>
-            <App />
-          </OrdersProvider>
+          <DriverProvider>
+            <OrdersProvider>
+              <App />
+            </OrdersProvider>
+          </DriverProvider>
         </InventoryProvider>
       </MenuProvider>
     </AuthProvider>
