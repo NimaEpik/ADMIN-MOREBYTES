@@ -757,7 +757,7 @@ function Inventory() {
       {/* ========================================================================= */}
       {isHistoryModalOpen && (
         <div className="modal-overlay">
-          <div className="modal-container modal-large">
+          <div className="modal-container modal-large history-modal">
             <div className="modal-header">
               <div>
                 <h2 className="modal-title">Inventory Activity Log</h2>
@@ -770,73 +770,89 @@ function Inventory() {
 
             <div className="modal-body">
               {/* History Filter Bar */}
-              <div className="history-filter-bar">
-                <div className="search-input-wrapper">
-                  <LuSearch className="search-icon" />
-                  <input
-                    type="text"
-                    className="search-input"
-                    placeholder="Search item, reason..."
-                    value={historySearch}
-                    onChange={(e) => {
-                      setHistorySearch(e.target.value);
-                      setHistoryPage(1);
-                    }}
-                  />
+              <div className="history-filter-bar" aria-label="Activity log filters">
+                <div className="history-filter-field history-search-field">
+                  <div className="search-input-wrapper">
+                    <LuSearch className="search-icon" />
+                    <input
+                      id="history-search"
+                      aria-label="Search activity"
+                      type="text"
+                      className="search-input"
+                      placeholder="Search item name"
+                      value={historySearch}
+                      onChange={(e) => {
+                        setHistorySearch(e.target.value);
+                        setHistoryPage(1);
+                      }}
+                    />
+                  </div>
                 </div>
 
-                <div className="select-dropdown-wrapper">
-                  <select
-                    className="filter-select"
-                    value={historyCategory}
-                    onChange={(e) => {
-                      setHistoryCategory(e.target.value);
-                      setHistoryPage(1);
-                    }}
-                  >
-                    <option value="All Categories">All Categories</option>
-                    <option value="Pizza">Pizza</option>
-                    <option value="Snack">Snack</option>
-                    <option value="Desserts">Desserts</option>
-                    <option value="Beverages">Beverages</option>
-                    <option value="Rice Meals">Rice Meals</option>
-                  </select>
-                  <LuChevronDown className="select-chevron-icon" />
+                <div className="history-filter-field">
+                  <div className="select-dropdown-wrapper">
+                    <select
+                      id="history-category"
+                      aria-label="Filter by category"
+                      className="filter-select"
+                      value={historyCategory}
+                      onChange={(e) => {
+                        setHistoryCategory(e.target.value);
+                        setHistoryPage(1);
+                      }}
+                    >
+                      <option value="All Categories">All Categories</option>
+                      <option value="Pizza">Pizza</option>
+                      <option value="Snack">Snack</option>
+                      <option value="Desserts">Desserts</option>
+                      <option value="Beverages">Beverages</option>
+                      <option value="Rice Meals">Rice Meals</option>
+                    </select>
+                    <LuChevronDown className="select-chevron-icon" />
+                  </div>
                 </div>
 
-                <div className="select-dropdown-wrapper">
-                  <select
-                    className="filter-select"
-                    value={historyAction}
-                    onChange={(e) => {
-                      setHistoryAction(e.target.value);
-                      setHistoryPage(1);
-                    }}
-                  >
-                    <option value="All">All Activities</option>
-                    <option value="New Stock">New Stock</option>
-                    <option value="Restocked">Restocked</option>
-                    <option value="Stock Deducted">Stock Deducted</option>
-                    <option value="Manual Adjustment">Manual Adjustment</option>
-                  </select>
-                  <LuChevronDown className="select-chevron-icon" />
+                <div className="history-filter-field">
+                  <div className="select-dropdown-wrapper">
+                    <select
+                      id="history-activity"
+                      aria-label="Filter by activity"
+                      className="filter-select"
+                      value={historyAction}
+                      onChange={(e) => {
+                        setHistoryAction(e.target.value);
+                        setHistoryPage(1);
+                      }}
+                    >
+                      <option value="All">All Activities</option>
+                      <option value="New Stock">New Stock</option>
+                      <option value="Restocked">Restocked</option>
+                      <option value="Stock Deducted">Stock Deducted</option>
+                      <option value="Manual Adjustment">Manual Adjustment</option>
+                    </select>
+                    <LuChevronDown className="select-chevron-icon" />
+                  </div>
                 </div>
 
-                <div className="select-dropdown-wrapper">
-                  <select
-                    className="filter-select"
-                    value={historyTime}
-                    onChange={(e) => {
-                      setHistoryTime(e.target.value);
-                      setHistoryPage(1);
-                    }}
-                  >
-                    <option value="All Time">All Time</option>
-                    <option value="Today">Today</option>
-                    <option value="This Week">This Week</option>
-                    <option value="This Month">This Month</option>
-                  </select>
-                  <LuChevronDown className="select-chevron-icon" />
+                <div className="history-filter-field">
+                  <div className="select-dropdown-wrapper">
+                    <select
+                      id="history-time"
+                      aria-label="Filter by date range"
+                      className="filter-select"
+                      value={historyTime}
+                      onChange={(e) => {
+                        setHistoryTime(e.target.value);
+                        setHistoryPage(1);
+                      }}
+                    >
+                      <option value="All Time">All Time</option>
+                      <option value="Today">Today</option>
+                      <option value="This Week">This Week</option>
+                      <option value="This Month">This Month</option>
+                    </select>
+                    <LuChevronDown className="select-chevron-icon" />
+                  </div>
                 </div>
               </div>
 
