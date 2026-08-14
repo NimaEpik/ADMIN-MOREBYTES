@@ -365,7 +365,7 @@ function Menu() {
                 </thead>
                 <tbody>
                   {paginatedItems.map((item) => (
-                    <tr key={item.id}>
+                    <tr key={item.id} className={item.status === 'archived' ? 'menu-row-archived' : ''}>
                       {/* Image Thumbnail */}
                       <td>
                         <div className="menu-img-container">

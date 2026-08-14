@@ -272,6 +272,39 @@
   border-bottom: none;
 }
 
+/* Archived Menu Items - Greyed Out State */
+.menu-table tr.menu-row-archived {
+  background-color: #F8F9FA;
+  opacity: 0.55;
+}
+
+.menu-table tr.menu-row-archived:hover {
+  background-color: #F3F4F6;
+}
+
+.menu-table tr.menu-row-archived .menu-img-container {
+  filter: grayscale(100%);
+  opacity: 0.7;
+}
+
+.menu-table tr.menu-row-archived .menu-item-name,
+.menu-table tr.menu-row-archived .menu-item-desc,
+.menu-table tr.menu-row-archived .menu-price-text {
+  color: #9CA3AF !important;
+}
+
+.menu-table tr.menu-row-archived .menu-category-badge {
+  background-color: #F3F4F6 !important;
+  color: #9CA3AF !important;
+  border-color: #E5E7EB !important;
+}
+
+.menu-table tr.menu-row-archived .menu-size-pill {
+  background-color: #F3F4F6 !important;
+  color: #9CA3AF !important;
+  border-color: #E5E7EB !important;
+}
+
 /* Image Thumbnail Column */
 .menu-img-container {
   width: 56px;

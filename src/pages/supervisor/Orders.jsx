@@ -173,6 +173,9 @@ function Orders() {
           </button>
         );
       case 'Preparing':
+        if (order.orderType !== 'Online Order') {
+          return null;
+        }
         return (
           <button className="orders-action-btn" onClick={() => advanceStatus(order.id, 'Out for Delivery')}>
             Assign Rider
@@ -182,6 +185,8 @@ function Orders() {
         return null;
     }
   };
+
+  const isPreparingOnlineOrder = (order) => order.status === 'Preparing' && order.orderType === 'Online Order';
 
   // Place order from POS modal
   const handlePlaceOrder = (orderData) => {
@@ -295,11 +300,6 @@ function Orders() {
           />
         </div>
 
-        {/* Refresh */}
-        <button className="orders-refresh-btn" onClick={handleRefresh} title="Reset Filters">
-          <LuRefreshCw size={18} />
-        </button>
-
         {/* Create Order */}
         <button className="orders-create-btn" onClick={() => setIsPOSOpen(true)}>
           <LuPlus size={16} />
@@ -391,14 +391,6 @@ function Orders() {
                               >
                                 View Details
                               </button>
-                              {(order.status === 'Pending' || order.status === 'Confirmed') && (
-                                <button
-                                  className="orders-dropdown-item danger"
-                                  onClick={() => handleCancelOrder(order.id)}
-                                >
-                                  Cancel Order
-                                </button>
-                              )}
                             </div>
                           )}
                         </div>
