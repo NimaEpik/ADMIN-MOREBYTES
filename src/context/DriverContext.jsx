@@ -6,10 +6,37 @@ const DriverContext = createContext(null);
 // Format driver ID like DRIVER-001
 const formatDriverId = (num) => `DRIVER-${String(num).padStart(3, '0')}`;
 
+const INITIAL_DRIVERS = [
+  {
+    id: 1,
+    driverId: 'DRIVER-001',
+    name: '1 John Rider',
+    phone: '+63 912 345 6789',
+    status: 'active',
+    vehicleType: 'Motorcycle HONDA CLICK',
+  },
+  {
+    id: 2,
+    driverId: 'DRIVER-002',
+    name: '2 Ghost Rider',
+    phone: '+63 912 379 5432',
+    status: 'active',
+    vehicleType: 'Motorcycle Yamaha Mio',
+  },
+  {
+    id: 3,
+    driverId: 'DRIVER-003',
+    name: '3 Johnny Klebitz',
+    phone: '+63 912 913 2222',
+    status: 'active',
+    vehicleType: 'Motorcycle Kawasaki',
+  },
+];
+
 export function DriverProvider({ children }) {
-  // Global drivers array state - initialized as empty array []
-  const [drivers, setDrivers] = useState([]);
-  const [driverCounter, setDriverCounter] = useState(1);
+  // Global drivers array state
+  const [drivers, setDrivers] = useState(INITIAL_DRIVERS);
+  const [driverCounter, setDriverCounter] = useState(4);
 
   // Add a new driver with auto-generated id and driverId
   const addDriver = (driverData) => {
@@ -71,3 +98,4 @@ export function DriverProvider({ children }) {
 export function useDriver() {
   return useContext(DriverContext);
 }
+

@@ -2,6 +2,7 @@ import { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useOrders } from '../../context/OrdersContext';
+import { useInventory } from '../../context/InventoryContext';
 import { LuUsers } from "react-icons/lu";
 import {
   LuShoppingCart,
@@ -33,15 +34,6 @@ const ACTIVITY_LOG = [
   { time: '10:39 AM', user: 'Owner', activity: 'Generates Report', status: 'Success' },
   { time: '11:09 AM', user: 'Owner', activity: 'Deleted John Driver', status: 'Success' },
   { time: '11:40 AM', user: 'Admin', activity: 'Updated stock for chicken wing', status: 'Success' },
-];
-
-// Hardcoded low stock items
-const LOW_STOCK_ITEMS = [
-  { name: 'Dough', qty: 2, level: 'critical', max: 20 },
-  { name: 'Egg', qty: 1, level: 'critical', max: 20 },
-  { name: 'Burger Bun', qty: 1, level: 'critical', max: 20 },
-  { name: 'Chicken Wing', qty: 5, level: 'low', max: 30 },
-  { name: 'Water Bottle', qty: 120, level: 'low', max: 200 },
 ];
 
 const DONUT_COLORS = {
@@ -113,6 +105,7 @@ const isToday = (dateStr) => {
 function Dashboard() {
   const { user } = useAuth();
   const { orders } = useOrders();
+  const { inventoryItems } = useInventory();
 
   const [chartMode, setChartMode] = useState('Daily');
   const [fromTime, setFromTime] = useState('8:00 AM');
@@ -159,6 +152,25 @@ function Dashboard() {
     () => [...todayOrders].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).slice(0, 5),
     [todayOrders]
   );
+
+  const lowStockItems = useMemo(() => {
+    if (!inventoryItems || inventoryItems.length === 0) return [];
+
+    return inventoryItems
+      .filter((item) => item.status === 'Low Stock' || item.status === 'Out of Stock')
+      .slice(0, 5)
+      .map((item) => {
+        const safeMax = Math.max(Number(item.reorderPoint) || 0, Number(item.currentStock) || 0, 1);
+        const level = item.status === 'Out of Stock' ? 'critical' : 'low';
+
+        return {
+          name: item.name,
+          qty: Number(item.currentStock) || 0,
+          level,
+          max: safeMax,
+        };
+      });
+  }, [inventoryItems]);
 
   // Sales chart data
   const chartData = useMemo(() => {
@@ -521,20 +533,24 @@ function Dashboard() {
             <Link to="/supervisor/inventory" className="dash-view-all">View All</Link>
           </div>
           <ul className="dash-stock-list">
-            {LOW_STOCK_ITEMS.map((item) => (
-              <li key={item.name} className="dash-stock-item">
-                <div className="dash-stock-row">
-                  <span className="dash-stock-name">{item.name}</span>
-                  <span className={`dash-stock-qty ${item.level}`}>{item.qty}pcs</span>
-                </div>
-                <div className="dash-stock-bar-track">
-                  <div
-                    className={`dash-stock-bar-fill ${item.level}`}
-                    style={{ width: `${Math.min((item.qty / item.max) * 100, 100)}%` }}
-                  />
-                </div>
-              </li>
-            ))}
+            {lowStockItems.length > 0 ? (
+              lowStockItems.map((item) => (
+                <li key={item.name} className="dash-stock-item">
+                  <div className="dash-stock-row">
+                    <span className="dash-stock-name">{item.name}</span>
+                    <span className={`dash-stock-qty ${item.level}`}>{item.qty}pcs</span>
+                  </div>
+                  <div className="dash-stock-bar-track">
+                    <div
+                      className={`dash-stock-bar-fill ${item.level}`}
+                      style={{ width: `${Math.min((item.qty / item.max) * 100, 100)}%` }}
+                    />
+                  </div>
+                </li>
+              ))
+            ) : (
+              <li className="dash-stock-empty">All inventory items are above the reorder level.</li>
+            )}
           </ul>
         </div>
       </div>

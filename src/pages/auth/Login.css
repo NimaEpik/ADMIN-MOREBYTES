@@ -39,7 +39,7 @@
   background: rgba(255, 255, 255, 0.10);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border: 0.5px solid #E8E0D8;
+  border: 0.2px solid #E8E0D8;
   border-radius: 10px;
   padding: 32px 40px 36px;
   box-shadow: none;
@@ -115,7 +115,7 @@
   width: 100%;
   height: 44px;
   background: #F5F0EB;
-  border: 1px solid #D9D0C8;
+  border: 0.2px solid #D9D0C8;
   border-radius: 10px;
   padding: 0 16px;
   font-family: 'DM Sans', sans-serif;
