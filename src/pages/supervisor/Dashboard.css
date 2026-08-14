@@ -167,6 +167,7 @@
   grid-template-columns: 1.4fr 1fr;
   gap: 18px;
   margin-bottom: 18px;
+  align-items: stretch;
 }
 
 /* Chart Filters */
@@ -241,6 +242,18 @@
   display: flex;
   gap: 12px;
   height: 220px;
+}
+
+/* Let the graph fill the height of the Sales Overview card when its sibling is taller. */
+.dash-chart-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.dash-chart-card .dash-bar-chart {
+  height: auto;
+  min-height: 220px;
+  flex: 1 1 auto;
 }
 
 .dash-bar-y-axis {
