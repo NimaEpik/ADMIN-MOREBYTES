@@ -4,15 +4,42 @@ import { useAuth } from './AuthContext';
 // Context for managing inventory state and stock movement history
 const InventoryContext = createContext(null);
 
+// Helper to compute days remaining until expiry
+const calculateDaysLeft = (expiryDate) => {
+  if (!expiryDate) return null;
+
+  const [year, month, day] = expiryDate.split('-').map(Number);
+  if (!year || !month || !day) return null;
+
+  const today = new Date();
+  const todayUtc = Date.UTC(today.getFullYear(), today.getMonth(), today.getDate());
+  const expiryUtc = Date.UTC(year, month - 1, day);
+  return Math.round((expiryUtc - todayUtc) / (1000 * 60 * 60 * 24));
+};
+
 // Status Auto-Calculation Helper
 // currentStock === 0 → "Out of Stock"
 // currentStock > 0 && currentStock <= reorderPoint → "Low Stock"
-// currentStock > reorderPoint → "Sufficient"
-export const calculateStockStatus = (currentStock, reorderPoint) => {
+// daysLeft === 0 → "Expires Today"
+// daysLeft > 0 && daysLeft <= 7 → "Expiring Soon"
+// daysLeft < 0 → "Expired"
+// Everything else → "Sufficient"
+export const calculateStockStatus = (currentStock, reorderPoint, expiryDate) => {
   const stock = Number(currentStock) || 0;
   const reorder = Number(reorderPoint) || 0;
+
+  // Stock-level checks take priority
   if (stock <= 0) return 'Out of Stock';
   if (stock <= reorder) return 'Low Stock';
+
+  // Expiry-based checks
+  const daysLeft = calculateDaysLeft(expiryDate);
+  if (daysLeft !== null) {
+    if (daysLeft === 0) return 'Expires Today';
+    if (daysLeft > 0 && daysLeft <= 7) return 'Expiring Soon';
+    if (daysLeft < 0) return 'Expired';
+  }
+
   return 'Sufficient';
 };
 
@@ -41,7 +68,8 @@ export function InventoryProvider({ children }) {
     const now = new Date().toISOString();
     const stock = Number(itemData.currentStock) || 0;
     const reorder = Number(itemData.reorderPoint) || 0;
-    const status = calculateStockStatus(stock, reorder);
+    const daysLeft = calculateDaysLeft(itemData.expiryDate);
+    const status = calculateStockStatus(stock, reorder, itemData.expiryDate);
 
     const newItem = {
       id: Date.now(),
@@ -49,6 +77,9 @@ export function InventoryProvider({ children }) {
       category: itemData.category,
       currentStock: stock,
       reorderPoint: reorder,
+      datePlaced: itemData.datePlaced || now.split('T')[0], // date placed field
+      expiryDate: itemData.expiryDate || '', // expiry date "YYYY-MM-DD"
+      daysLeft,
       lastUpdated: now,
       createdAt: now,
       status: status,
@@ -83,8 +114,9 @@ export function InventoryProvider({ children }) {
           const updated = {
             ...item,
             currentStock: newStock,
+            daysLeft: calculateDaysLeft(item.expiryDate),
             lastUpdated: now,
-            status: calculateStockStatus(newStock, item.reorderPoint),
+            status: calculateStockStatus(newStock, item.reorderPoint, item.expiryDate),
           };
           updatedTarget = updated;
           return updated;
@@ -116,14 +148,18 @@ export function InventoryProvider({ children }) {
         if (item.id === id) {
           const stock = Number(updatedItemData.currentStock) || 0;
           const reorder = Number(updatedItemData.reorderPoint) || 0;
+          const expiryDate = updatedItemData.expiryDate || item.expiryDate;
           const updated = {
             ...item,
             name: updatedItemData.name.trim(),
             category: updatedItemData.category,
             currentStock: stock,
             reorderPoint: reorder,
+            datePlaced: updatedItemData.datePlaced || item.datePlaced, // preserve or update
+            expiryDate, // preserve or update
+            daysLeft: calculateDaysLeft(expiryDate),
             lastUpdated: now,
-            status: calculateStockStatus(stock, reorder),
+            status: calculateStockStatus(stock, reorder, expiryDate),
           };
           updatedTarget = updated;
           return updated;
@@ -164,8 +200,9 @@ export function InventoryProvider({ children }) {
           const updated = {
             ...item,
             currentStock: newStock,
+            daysLeft: calculateDaysLeft(item.expiryDate),
             lastUpdated: now,
-            status: calculateStockStatus(newStock, item.reorderPoint),
+            status: calculateStockStatus(newStock, item.reorderPoint, item.expiryDate),
           };
           updatedTarget = updated;
           return updated;
@@ -188,10 +225,17 @@ export function InventoryProvider({ children }) {
     }
   };
 
+  // Refresh computed expiry fields whenever the provider renders.
+  const computedInventoryItems = inventoryItems.map((item) => ({
+    ...item,
+    daysLeft: calculateDaysLeft(item.expiryDate),
+    status: calculateStockStatus(item.currentStock, item.reorderPoint, item.expiryDate),
+  }));
+
   return (
     <InventoryContext.Provider
       value={{
-        inventoryItems,
+        inventoryItems: computedInventoryItems,
         activityLogs,
         addItem,
         restockItem,

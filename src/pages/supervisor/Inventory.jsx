@@ -47,6 +47,26 @@ const formatDateTime = (isoString) => {
   });
 };
 
+// Format expiry date into readable format like "Aug 21, 2026"
+const formatExpiryDate = (dateStr) => {
+  if (!dateStr) return 'N/A';
+  const date = new Date(dateStr + 'T00:00:00');
+  return date.toLocaleDateString('en-US', {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+  });
+};
+
+// Get CSS class and display text for days left column
+const getDaysLeftDisplay = (daysLeft) => {
+  if (daysLeft === null) return { className: 'text-gray', text: 'N/A' };
+  if (daysLeft < 0) return { className: 'days-left-red', text: 'Expired' };
+  if (daysLeft === 0) return { className: 'days-left-red', text: '0 days' };
+  if (daysLeft <= 7) return { className: 'days-left-orange', text: `${daysLeft} days` };
+  return { className: 'days-left-green', text: `${daysLeft} days` };
+};
+
 function Inventory() {
   const {
     inventoryItems = [],
@@ -71,12 +91,14 @@ function Inventory() {
   // Selected Item for Modals
   const [selectedItem, setSelectedItem] = useState(null);
 
-  // Modal Form State
+  // Modal Form State — includes datePlaced and expiryDate
   const [addForm, setAddForm] = useState({
     name: '',
     category: 'Pizza',
     currentStock: '',
     reorderPoint: '',
+    datePlaced: '',
+    expiryDate: '',
   });
   const [restockQuantity, setRestockQuantity] = useState('');
   const [editForm, setEditForm] = useState({
@@ -84,6 +106,8 @@ function Inventory() {
     category: 'Pizza',
     currentStock: '',
     reorderPoint: '',
+    datePlaced: '',
+    expiryDate: '',
   });
 
   // Stock History Filters State
@@ -114,6 +138,7 @@ function Inventory() {
     (item) => item.status === 'Sufficient'
   ).length;
 
+
   // Filter main inventory items table
   const filteredItems = inventoryItems.filter((item) => {
     const matchesSearch =
@@ -137,10 +162,16 @@ function Inventory() {
   const showingStart = filteredItems.length === 0 ? 0 : (currentPage - 1) * ITEMS_PER_PAGE + 1;
   const showingEnd = Math.min(currentPage * ITEMS_PER_PAGE, filteredItems.length);
 
-  // Handle Add Stock Form Submit
+  // Handle Add Stock Form Submit — includes datePlaced and expiryDate
   const handleAddSubmit = (e) => {
     e.preventDefault();
-    if (!addForm.name.trim() || addForm.currentStock === '' || addForm.reorderPoint === '') {
+    if (
+      !addForm.name.trim() ||
+      addForm.currentStock === '' ||
+      addForm.reorderPoint === '' ||
+      !addForm.datePlaced ||
+      !addForm.expiryDate
+    ) {
       setFormError('Please fill out all required fields.');
       return;
     }
@@ -149,8 +180,10 @@ function Inventory() {
       category: addForm.category,
       currentStock: Number(addForm.currentStock),
       reorderPoint: Number(addForm.reorderPoint),
+      datePlaced: addForm.datePlaced,
+      expiryDate: addForm.expiryDate,
     });
-    setAddForm({ name: '', category: 'Pizza', currentStock: '', reorderPoint: '' });
+    setAddForm({ name: '', category: 'Pizza', currentStock: '', reorderPoint: '', datePlaced: '', expiryDate: '' });
     setFormError('');
     setIsAddModalOpen(false);
   };
@@ -176,7 +209,7 @@ function Inventory() {
     setIsRestockModalOpen(false);
   };
 
-  // Handle Open Edit Modal
+  // Handle Open Edit Modal — pre-fill datePlaced and expiryDate
   const openEditModal = (item) => {
     setSelectedItem(item);
     setEditForm({
@@ -184,15 +217,23 @@ function Inventory() {
       category: item.category,
       currentStock: item.currentStock,
       reorderPoint: item.reorderPoint,
+      datePlaced: item.datePlaced || '',
+      expiryDate: item.expiryDate || '',
     });
     setFormError('');
     setIsEditModalOpen(true);
   };
 
-  // Handle Submit Edit
+  // Handle Submit Edit — includes datePlaced and expiryDate
   const handleEditSubmit = (e) => {
     e.preventDefault();
-    if (!editForm.name.trim() || editForm.currentStock === '' || editForm.reorderPoint === '') {
+    if (
+      !editForm.name.trim() ||
+      editForm.currentStock === '' ||
+      editForm.reorderPoint === '' ||
+      !editForm.datePlaced ||
+      !editForm.expiryDate
+    ) {
       setFormError('Please fill out all required fields.');
       return;
     }
@@ -201,6 +242,8 @@ function Inventory() {
       category: editForm.category,
       currentStock: Number(editForm.currentStock),
       reorderPoint: Number(editForm.reorderPoint),
+      datePlaced: editForm.datePlaced,
+      expiryDate: editForm.expiryDate,
     });
     setFormError('');
     setIsEditModalOpen(false);
@@ -266,7 +309,7 @@ function Inventory() {
             className="btn btn-primary-add"
             onClick={() => {
               setFormError('');
-              setAddForm({ name: '', category: 'Pizza', currentStock: '', reorderPoint: '' });
+              setAddForm({ name: '', category: 'Pizza', currentStock: '', reorderPoint: '', datePlaced: '', expiryDate: '' });
               setIsAddModalOpen(true);
             }}
           >
@@ -361,6 +404,7 @@ function Inventory() {
           <LuChevronDown className="select-chevron-icon" />
         </div>
 
+        {/* Status filter — includes new expiry statuses */}
         <div className="select-dropdown-wrapper">
           <select
             className="filter-select"
@@ -374,6 +418,9 @@ function Inventory() {
             <option value="Out of Stock">Out of Stock</option>
             <option value="Low Stock">Low Stock</option>
             <option value="Sufficient">Sufficient</option>
+            <option value="Expiring Soon">Expiring Soon</option>
+            <option value="Expires Today">Expires Today</option>
+            <option value="Expired">Expired</option>
           </select>
           <LuChevronDown className="select-chevron-icon" />
         </div>
@@ -391,7 +438,7 @@ function Inventory() {
             <p className="empty-state-subtext">Click '+ Add Stock' to add your first item</p>
           </div>
         ) : (
-          /* Items Table */
+          /* Items Table — includes Expiry Date and Days Left columns */
           <div className="table-responsive">
             <table className="inventory-table">
               <thead>
@@ -400,6 +447,8 @@ function Inventory() {
                   <th>Category</th>
                   <th>Current Stock</th>
                   <th>Reorder Point</th>
+                  <th>Expiry Date</th>
+                  <th>Days Left</th>
                   <th>Last Updated</th>
                   <th>Status</th>
                   <th className="text-right">Actions</th>
@@ -408,6 +457,7 @@ function Inventory() {
               <tbody>
                 {paginatedItems.map((item) => {
                   const isLowOrOut = item.status === 'Out of Stock' || item.status === 'Low Stock';
+                  const daysLeftInfo = getDaysLeftDisplay(item.daysLeft);
 
                   return (
                     <tr key={item.id}>
@@ -424,6 +474,12 @@ function Inventory() {
 
                       {/* Reorder Point */}
                       <td className="text-dark">{item.reorderPoint} pcs</td>
+
+                      {/* Expiry Date — formatted readable date */}
+                      <td className="text-gray">{formatExpiryDate(item.expiryDate)}</td>
+
+                      {/* Days Left — color-coded */}
+                      <td className={daysLeftInfo.className}>{daysLeftInfo.text}</td>
 
                       {/* Last Updated - relative time */}
                       <td className="text-gray">{getRelativeTime(item.lastUpdated)}</td>
@@ -497,12 +553,13 @@ function Inventory() {
         )}
       </div>
 
+
       {/* ========================================================================= */}
       {/* MODAL 1: ADD STOCK MODAL */}
       {/* ========================================================================= */}
       {isAddModalOpen && (
         <div className="modal-overlay">
-          <div className="modal-container">
+          <div className="modal-container inventory-modal-container">
             <div className="modal-header">
               <div>
                 <h2 className="modal-title">Add new stock item</h2>
@@ -513,7 +570,7 @@ function Inventory() {
               </button>
             </div>
 
-            <form onSubmit={handleAddSubmit}>
+            <form className="inventory-modal-form" onSubmit={handleAddSubmit}>
               <div className="modal-body">
                 {formError && <div className="form-error-alert">{formError}</div>}
 
@@ -585,6 +642,33 @@ function Inventory() {
                       System will alert when stock falls below this number
                     </small>
                   </div>
+
+                  {/* Date Placed — new field */}
+                  <div className="form-group">
+                    <label className="form-label">DATE PLACED</label>
+                    <input
+                      type="date"
+                      className="form-input"
+                      value={addForm.datePlaced}
+                      onChange={(e) => setAddForm({ ...addForm, datePlaced: e.target.value })}
+                      required
+                    />
+                  </div>
+
+                  {/* Expiry Date — new field */}
+                  <div className="form-group">
+                    <label className="form-label">EXPIRY DATE</label>
+                    <input
+                      type="date"
+                      className="form-input"
+                      value={addForm.expiryDate}
+                      onChange={(e) => setAddForm({ ...addForm, expiryDate: e.target.value })}
+                      required
+                    />
+                    <small className="form-helper-text">
+                      System will alert when item is near or past its expiry date
+                    </small>
+                  </div>
                 </div>
               </div>
 
@@ -610,7 +694,7 @@ function Inventory() {
       {/* ========================================================================= */}
       {isRestockModalOpen && selectedItem && (
         <div className="modal-overlay">
-          <div className="modal-container modal-sm">
+          <div className="modal-container inventory-modal-container modal-sm">
             <div className="modal-header">
               <div>
                 <h2 className="modal-title">Restock {selectedItem.name}</h2>
@@ -621,7 +705,7 @@ function Inventory() {
               </button>
             </div>
 
-            <form onSubmit={handleRestockSubmit}>
+            <form className="inventory-modal-form" onSubmit={handleRestockSubmit}>
               <div className="modal-body">
                 {formError && <div className="form-error-alert">{formError}</div>}
                 <div className="form-group">
@@ -659,11 +743,11 @@ function Inventory() {
       )}
 
       {/* ========================================================================= */}
-      {/* MODAL 3: EDIT MODAL */}
+      {/* MODAL 3: EDIT MODAL — includes datePlaced and expiryDate fields */}
       {/* ========================================================================= */}
       {isEditModalOpen && selectedItem && (
         <div className="modal-overlay">
-          <div className="modal-container">
+          <div className="modal-container inventory-modal-container">
             <div className="modal-header">
               <div>
                 <h2 className="modal-title">Edit Stock Item</h2>
@@ -674,7 +758,7 @@ function Inventory() {
               </button>
             </div>
 
-            <form onSubmit={handleEditSubmit}>
+            <form className="inventory-modal-form" onSubmit={handleEditSubmit}>
               <div className="modal-body">
                 {formError && <div className="form-error-alert">{formError}</div>}
 
@@ -733,6 +817,33 @@ function Inventory() {
                     <span className="unit-label">pcs</span>
                   </div>
                 </div>
+
+                {/* Date Placed — pre-filled from existing item */}
+                <div className="form-group">
+                  <label className="form-label">DATE PLACED</label>
+                  <input
+                    type="date"
+                    className="form-input"
+                    value={editForm.datePlaced}
+                    onChange={(e) => setEditForm({ ...editForm, datePlaced: e.target.value })}
+                    required
+                  />
+                </div>
+
+                {/* Expiry Date — pre-filled from existing item */}
+                <div className="form-group">
+                  <label className="form-label">EXPIRY DATE</label>
+                  <input
+                    type="date"
+                    className="form-input"
+                    value={editForm.expiryDate}
+                    onChange={(e) => setEditForm({ ...editForm, expiryDate: e.target.value })}
+                    required
+                  />
+                  <small className="form-helper-text">
+                    System will alert when item is near or past its expiry date
+                  </small>
+                </div>
               </div>
 
               <div className="modal-footer">
@@ -757,7 +868,7 @@ function Inventory() {
       {/* ========================================================================= */}
       {isHistoryModalOpen && (
         <div className="modal-overlay">
-          <div className="modal-container modal-large history-modal">
+          <div className="modal-container inventory-modal-container modal-large history-modal">
             <div className="modal-header">
               <div>
                 <h2 className="modal-title">Inventory Activity Log</h2>

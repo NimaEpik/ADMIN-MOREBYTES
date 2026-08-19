@@ -517,7 +517,7 @@
   -webkit-overflow-scrolling: touch;
 }
 
-.modal-container {
+.modal-container.inventory-modal-container {
   background-color: #FFFFFF;
   border-radius: 16px;
   width: 100%;
@@ -532,7 +532,7 @@
   animation: modalFadeIn 0.2s ease-out forwards;
 }
 
-.modal-sm {
+.modal-container.inventory-modal-container.modal-sm {
   max-width: 420px;
 }
 
@@ -560,7 +560,7 @@
   }
 }
 
-.modal-header {
+.inventory-modal-container .modal-header {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
@@ -568,20 +568,20 @@
   border-bottom: 1px solid #E5E7EB;
 }
 
-.modal-title {
+.inventory-modal-container .modal-title {
   font-size: 18px;
   font-weight: 700;
   color: #111827;
   margin: 0 0 4px 0;
 }
 
-.modal-subtitle {
+.inventory-modal-container .modal-subtitle {
   font-size: 13px;
   color: #6B7280;
   margin: 0;
 }
 
-.modal-close-btn {
+.inventory-modal-container .modal-close-btn {
   background: transparent;
   border: none;
   font-size: 20px;
@@ -595,20 +595,28 @@
   transition: color 0.15s ease, background-color 0.15s ease;
 }
 
-.modal-close-btn:hover {
+.inventory-modal-container .modal-close-btn:hover {
   color: #111827;
   background-color: #F3F4F6;
 }
 
-.modal-body {
+.inventory-modal-form {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.inventory-modal-container > .modal-body,
+.inventory-modal-form .modal-body {
   padding: 28px 28px 20px 28px;
   overflow-y: auto;
   flex: 1 1 auto;
-  /* ensure modal body can scroll when content is tall */
-  max-height: calc(100vh - 160px);
+  min-height: 0;
 }
 
-.modal-footer {
+.inventory-modal-container .modal-footer {
   display: flex;
   justify-content: flex-end;
   align-items: center;
@@ -987,3 +995,37 @@
     display: none;
   }
 }
+
+/* ===== Perishables / Expiry Status Badges ===== */
+.badge-expiring-soon {
+  background-color: #F97316;
+  color: #FFFFFF;
+}
+
+.badge-expires-today {
+  background-color: #EF4444;
+  color: #FFFFFF;
+}
+
+.badge-expired {
+  background-color: #FDA4AF;
+  color: #881337;
+}
+
+/* Days Left column colors */
+.days-left-green {
+  color: #22C55E;
+  font-weight: 600;
+}
+
+.days-left-orange {
+  color: #F97316;
+  font-weight: 600;
+}
+
+.days-left-red {
+  color: #EF4444;
+  font-weight: 600;
+}
+
+
